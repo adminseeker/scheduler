@@ -14,9 +14,9 @@ app.get("/",(req,res)=>{
     res.json({"msg":"created by adminseeker!"})
 })
 
-// app.use("/api/users/",require("./routers/api/users"));
 app.use("/api/auth/",require("./routers/api/auth"));
 app.use("/api/users/",require("./routers/api/users"));
+app.use("/api/tasks/",require("./routers/api/tasks"));
 
 app.listen(PORT,()=>{
     console.log("Server started on port "+PORT+"!");

@@ -5,6 +5,7 @@ const auth = require("../../middleware/auth");
 const generateAuthToken = require("../../token/generateAuthToken");
 
 const User = require("../../models/User");
+const Task = require("../../models/Task");
 
 const router = express.Router();
 
@@ -118,6 +119,7 @@ router.delete("/",auth,async(req,res)=>{
         if(!user){
            return res.json({"msg":"User Not Found!"})
         }
+        await Task.deleteMany({user:req.user.id})
         await user.remove();
         return res.json({"msg":"User removed Successfully!"});
         

@@ -17,6 +17,7 @@ app.get("/",(req,res)=>{
 app.use("/api/auth/",require("./routers/api/auth"));
 app.use("/api/users/",require("./routers/api/users"));
 app.use("/api/tasks/",require("./routers/api/tasks"));
+app.use("/api/scores/",require("./routers/api/scores"));
 
 app.listen(PORT,()=>{
     console.log("Server started on port "+PORT+"!");

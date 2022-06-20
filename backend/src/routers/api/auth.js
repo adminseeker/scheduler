@@ -40,11 +40,11 @@ router.post("/login",async (req,res)=>{
     try {
         const user = await User.findOne({email:req.body.email});
         if(!user){
-            return res.status(400).json({errors:[{msg:"invalid credentials"}]});
+            return res.json({msg:"invalid credentials"});
         }
         const isMatch = await bcrypt.compare(req.body.password,user.password);
         if(!isMatch){
-            return res.status(400).json({errors:[{msg:"invalid credentials"}]});
+            return res.json({msg:"invalid credentials"});
         }
         generateAuthToken(user.id,(token)=>{
             user.tokens =user.tokens.concat({token})

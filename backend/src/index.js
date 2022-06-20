@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+var cors = require('cors')
 
 const connectToMongoDB = require("./db/mongoose");
 
@@ -9,6 +10,7 @@ const app = express();
 connectToMongoDB();
 
 app.use(express.json());
+app.use(cors())
 
 app.get("/",(req,res)=>{
     res.json({"msg":"created by adminseeker!"})

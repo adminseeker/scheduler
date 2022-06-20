@@ -14,7 +14,7 @@ const router = express.Router();
     method: "GET"
 */
 
-router.get("/",auth,async (req,res)=>{
+router.get("/total",auth,async (req,res)=>{
     try {
         const user = req.user;
         if(!user){

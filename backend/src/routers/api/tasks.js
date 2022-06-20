@@ -4,6 +4,7 @@ const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 const Task = require("../../models/Task");
+const moment = require("moment")
 
 const router = express.Router();
 
@@ -37,12 +38,12 @@ router.get("/",auth,async (req,res)=>{
     try {
         const user = req.user;
         if(!user){
-            return res.json({"msg":"User Not Found!"})
+            return res.json([])
         }
     
         const tasks = await Task.find({user:req.user.id})
         if(tasks.length==0){
-            return res.json({"msg":"No Tasks Found!"})
+            return res.json([])
         }
         res.json(tasks);
     } catch (error) {
@@ -70,6 +71,40 @@ router.get("/:id",auth,async (req,res)=>{
             return res.json({"msg":"No Task Found!"})
         }
         res.json(task);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send();
+    }
+});
+
+/* 
+    route : "/api/tasks/task_id",
+    desc : "get tasks by date",
+    method: "POST"
+*/
+
+router.post("/date",auth,async (req,res)=>{
+    try {
+        const user = req.user;
+        if(!user){
+            return res.json([])
+        }
+    
+        const tasks = await Task.find({user:req.user.id})
+        let date=req.body.date
+        let year=date.split("-")[0]
+        let month=date.split("-")[1]
+        let day=date.split("-")[2]
+        let result=[]
+        tasks.forEach((task)=>{
+            if(moment(task.start_time).year()==year && moment(task.start_time).month()+1==month && moment(task.start_time).date()==day ){
+                result.push(task)
+            }
+        })
+        if(tasks.length==0){
+            return res.json([])
+        }
+        res.json(result);
     } catch (error) {
         console.log(error);
         return res.status(500).send();

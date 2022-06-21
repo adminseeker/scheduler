@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import {connect} from "react-redux";
 import TasksForm from "./TasksForm";
 import {editTask} from "../../actions/tasks";
+import { useLocation, Navigate,useParams } from "react-router-dom";
 
 
 const EditTask = (props)=>{
-    return(
+    let location = useLocation();
+    let params=useParams()
+    let date=params.date
+    let id=params.id
+    let task = props.tasks.filter((task)=>(String(task._id)===String(id)))[0]
+    const [submit,setSubmit] = useState(false)
+    return !props.isAuthenticated ? <Navigate to="/login" state={{ from: location }} replace /> : submit ? <Navigate to="/dashboard" state={{ from: location }} replace /> :
+    (
         <div>
-            <TasksForm task={props.task[0]} onSubmit={(updates)=>{await props.dispatch(editTask(updates,props.task[0].id));}}/>
+            <TasksForm date={date} task={task} onSubmit={(updates)=>{props.dispatch(editTask(updates,task._id,date)); setSubmit(true)}}/>
         </div>
     )
 }
 
 const mapStateToProps = (state,props)=>{
     return{
-        task : state.tasks.filter((task)=>(String(task.id)===String(props.match.params.id)))
+        tasks:state.tasks,
+        isAuthenticated:state.auth.isAuthenticated
     }
 
 };

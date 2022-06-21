@@ -3,18 +3,18 @@ import TasksForm from "./TasksForm";
 import {addTask} from "../../actions/tasks";
 import {connect} from "react-redux";
 import { useLocation, Navigate,useParams } from "react-router-dom";
-import { promise } from "bcrypt/promises";
 
 
-const AddTask = ({addTask})=>{
+
+const AddTask = ({addTask,isAuthenticated})=>{
   let location = useLocation();
   let params=useParams()
-  let date=params.id
+  let date=params.date
     const [submit,setSubmit] = useState(false)
-    return submit ? <Navigate to="/dashboard" state={{ from: location }} replace /> :
+    return !isAuthenticated ? <Navigate to="/login" state={{ from: location }} replace /> : submit ? <Navigate to="/dashboard" state={{ from: location }} replace /> :
     (
         <div>
-            <TasksForm onSubmit={(task)=>{addTask(task,date)
+            <TasksForm date={date} onSubmit={(task)=>{addTask(task,date)
                 setSubmit(true)
             }}/>
         </div>
@@ -22,6 +22,7 @@ const AddTask = ({addTask})=>{
 }
 
 const mapStateToProps = (state,props)=>({
+    isAuthenticated:state.auth.isAuthenticated
 })
 
 export default connect(mapStateToProps,{addTask})(AddTask);

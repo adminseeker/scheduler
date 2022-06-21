@@ -6,6 +6,7 @@ import Dashboard from '../components/Dashboard';
 import Landing from '../components/Landing';
 import Login from '../components/Login';
 import AddTask from '../components/tasks/AddTask';
+import EditTask from '../components/tasks/EditTask';
 
 const history = createHistory();
 
@@ -16,7 +17,8 @@ const AppRouter = () => {
           <Route path='/' element={<Landing />} />
           <Route path='/login' element={<Login />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/tasks/add/:id' element={<AddTask />} />
+          <Route path='/tasks/add/:date' element={<AddTask />} />
+          <Route path='/tasks/edit/:date/:id' element={<EditTask />} />
         </Routes>
         </BrowserRouter>
   );

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import url from '../utils/backendUrl'
+import { getScoreByDate } from './scores';
 
 let backend_url = url()
 
@@ -14,7 +15,7 @@ const addTask = (task,date) => {
         },
       };
       const res = await axios.post(backend_url+'/api/tasks/', body, config);
-      await dispatch(getTasksByDate(date));
+      // await dispatch(getTasksByDate(date));
       return res.data;
     } catch (error) {
       console.log(error);
@@ -77,9 +78,9 @@ const editTask = (task, id,date) => {
         },
       };
 
-      const res = await axios.patch('/api/tasks/' + id , body, config);
+      const res = await axios.patch(backend_url+'/api/tasks/' + id , body, config);
 
-      await dispatch(getTasksByDate(date));
+      // await dispatch(getTasksByDate(date));
       return res.data;
     } catch (error) {
       console.log(error);
@@ -98,8 +99,9 @@ const removeTask = (id,date) => {
           'Content-Type': 'application/json',
         },
       };
-      const res = await axios.delete('/api/tasks/' + id, config);
+      const res = await axios.delete(backend_url+'/api/tasks/' + id, config);
       await dispatch(getTasksByDate(date));
+
       return res.data.msg;
     } catch (error) {
       console.log(error);

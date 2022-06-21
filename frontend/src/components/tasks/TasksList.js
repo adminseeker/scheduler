@@ -48,6 +48,7 @@ const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate }) => {
     <div style={{ textAlign: 'center' }}>
       <TaskDatePicker date={date} setDate={setDate}/>
       <Link to={"/tasks/add/"+date}>Add Task</Link>
+      <h2>Total Score: {totalScore}</h2>
       <h3>No Tasks</h3>
     </div>
   ) : (
@@ -59,7 +60,7 @@ const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate }) => {
         <h2>Total Score: {totalScore}</h2>
         <h2>Score on {date}: {dailyScore}</h2>
         { tasks &&
-            tasks.map((task) => <TasksListItem key={task._id} task={task} />)
+            tasks.map((task) => <TasksListItem key={task._id} task={task} date={date} totalScore={totalScore} dailyScore={dailyScore} setDailyScore={setDailyScore} setTotalScore={setTotalScore}/>)
         }
       
     </div>

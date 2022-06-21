@@ -7,7 +7,6 @@ const getTotalScore = () => {
     return async (dispatch) => {
       try {
         const res = await axios.get(backend_url+'/api/scores/total');
-        console.log(res.data)
         return res.data
       } catch (error) {
         console.log(error);
@@ -15,4 +14,22 @@ const getTotalScore = () => {
     };
   };
 
-  export {getTotalScore}
+  const getScoreByDate = (date) => {
+    return async (dispatch) => {
+      try {
+        const body = JSON.stringify({date});
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        const res = await axios.post(backend_url+'/api/scores/date', body, config);
+        return res.data
+      } catch (error) {
+        console.log(error);
+       
+      }
+    };
+  };
+
+  export {getTotalScore,getScoreByDate}

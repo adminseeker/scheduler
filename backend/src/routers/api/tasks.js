@@ -104,6 +104,7 @@ router.post("/date",auth,async (req,res)=>{
         if(tasks.length==0){
             return res.json([])
         }
+        result.sort((i,j)=>new Date(i.start_time)-new Date(j.start_time))
         res.json(result);
     } catch (error) {
         console.log(error);

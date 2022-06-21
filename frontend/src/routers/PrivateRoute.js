@@ -11,7 +11,8 @@ const PrivateRoute = ({component:Component, isAuthenticated,loading,...rest}) =>
                      <Navigate to="/login" state={{ from: location }} replace />
                     
                     ) : (
-                        <Component  {...props}/>
+                        // <Component  {...props}/>
+                        <Component {...props}/>
                     )
                 
         )} />

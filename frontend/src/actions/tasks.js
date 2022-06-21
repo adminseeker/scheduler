@@ -4,7 +4,7 @@ import url from '../utils/backendUrl'
 let backend_url = url()
 
 
-const addTask = (task) => {
+const addTask = (task,date) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify(task);
@@ -14,7 +14,7 @@ const addTask = (task) => {
         },
       };
       const res = await axios.post(backend_url+'/api/tasks/', body, config);
-      await dispatch(getTasks());
+      await dispatch(getTasksByDate(date));
       return res.data;
     } catch (error) {
       console.log(error);
@@ -43,8 +43,31 @@ const getTasks = () => {
 };
 
 
+const getTasksByDate = (date) => {
+  return async (dispatch) => {
+    try {
+      const body = JSON.stringify({date});
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const res = await axios.post(backend_url+'/api/tasks/date', body, config);
+      dispatch({
+        type: 'GET_TASKS',
+        tasks: res.data,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: 'TASKS_ERROR',
+      });
+    }
+  };
+};
 
-const editTask = (task, id) => {
+
+const editTask = (task, id,date) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify(task);
@@ -56,7 +79,7 @@ const editTask = (task, id) => {
 
       const res = await axios.patch('/api/tasks/' + id , body, config);
 
-      await dispatch(getTasks());
+      await dispatch(getTasksByDate(date));
       return res.data;
     } catch (error) {
       console.log(error);
@@ -67,7 +90,7 @@ const editTask = (task, id) => {
   };
 };
 
-const removeTask = (id) => {
+const removeTask = (id,date) => {
   return async (dispatch) => {
     try {
       const config = {
@@ -76,7 +99,7 @@ const removeTask = (id) => {
         },
       };
       const res = await axios.delete('/api/tasks/' + id, config);
-      await dispatch(getTasks());
+      await dispatch(getTasksByDate(date));
       return res.data.msg;
     } catch (error) {
       console.log(error);
@@ -87,4 +110,4 @@ const removeTask = (id) => {
   };
 };
 
-export { addTask,getTasks,editTask,removeTask };
+export { addTask,getTasks,getTasksByDate,editTask,removeTask };

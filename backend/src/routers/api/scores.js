@@ -22,9 +22,7 @@ router.get("/total",auth,async (req,res)=>{
         }
     
         const tasks = await Task.find({user:req.user.id})
-        if(tasks.length==0){
-            return res.json({"msg":"No Tasks Found!"})
-        }
+       
 
         tasks.forEach(async (task)=>{
             if(new Date()>task.end_time && task.status!="completed"){

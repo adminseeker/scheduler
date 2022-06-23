@@ -52,7 +52,6 @@ const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate,getTasksB
       setTotalScore(totalData.totalScore)
       setDailyScore(dailyData.dailyScore)
       await getTasksByDateAndStatus(date,status)
-
     }
     fun()
     // getTasksByDate(date)

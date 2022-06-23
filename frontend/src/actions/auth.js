@@ -4,6 +4,38 @@ import url from '../utils/backendUrl'
 
 let backend_url = url()
 
+const register = ({email,password,phone,name}) =>{
+  return async (dispatch) => {
+    const config = {
+      headers: {
+        'Content-Type':'application/json',
+      }
+    }
+    const body = JSON.stringify({email,password,phone,name})
+    try{
+      const res=await axios.post(backend_url+'/api/users',body,config);
+      if (!!res.data.token) {
+        dispatch({
+          type: 'LOGIN_SUCCESS',
+          token: res.data.token,
+        });
+      }
+
+      dispatch(loadUser());
+      if(!res.data.token) return res.data.msg
+
+      return res.data;
+    } catch (err) {
+      if (err && err.response && err.response.status === 400) {
+        dispatch({
+          type: 'LOGIN_FAIL',
+        });
+        return err.response.data.errors[0].msg;
+      }
+    }
+  };
+};
+
 const login = ({ email, password }) => {
   return async (dispatch) => {
     const config = {
@@ -198,6 +230,7 @@ const deleteAccount = () => {
 
 export {
   loadUser,
+  register,
   login,
   logout,
   logoutAll,

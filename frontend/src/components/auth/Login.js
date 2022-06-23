@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { login } from '../actions/auth';
+import { login } from '../../actions/auth';
 import { connect } from 'react-redux';
-import { setAlert } from '../actions/alert';
+import { setAlert } from '../../actions/alert';
 import { useLocation, Navigate } from "react-router-dom";
 // import { Link } from 'react-router-dom';
 

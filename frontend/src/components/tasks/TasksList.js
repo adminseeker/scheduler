@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import { getTasksByDate } from '../../actions/tasks';
+import { getTasksByDate, getTasksByDateAndStatus } from '../../actions/tasks';
 import { getTotalScore,getScoreByDate } from '../../actions/scores';
 import TasksListItem from './TasksListItem';
 
@@ -27,26 +27,41 @@ const TaskDatePicker = (props) => {
   )
 }
 
+const StatusSelecter = ({status,setStatus}) => {
+  return (
+    <select name='status' value={status} onChange={(e)=>setStatus(e.target.value)}>
+          <option  value="all">All</option>
+            <option  value="completed">Completed</option>
+            <option  value="pending">Pending</option>
+            <option  value="Timeout">Timeout</option>
+            <option  value="In Progress">In Progress</option>
+          </select>
+  )
+}
 
 
-const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate }) => {
+const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate,getTasksByDateAndStatus }) => {
   const [totalScore,setTotalScore] = useState(0)
   const [dailyScore,setDailyScore] = useState(0)
-  const [date, setDate] = React.useState(new Date().getFullYear().toString()+"-"+(new Date().getMonth()+1).toString()+"-"+new Date().getDate());
+  const [date, setDate] = useState(new Date().getFullYear().toString()+"-"+(new Date().getMonth()+1).toString()+"-"+new Date().getDate());
+  const [status,setStatus] = useState('all')
   useEffect(() => {
     const fun = async ()=>{
       let totalData=await getTotalScore()
       let dailyData=await getScoreByDate(date)
       setTotalScore(totalData.totalScore)
       setDailyScore(dailyData.dailyScore)
+      await getTasksByDateAndStatus(date,status)
+
     }
     fun()
-    getTasksByDate(date)
+    // getTasksByDate(date)
 
-  }, [getTasksByDate,getTotalScore,getScoreByDate,date]);
+  }, [getTasksByDate,getTotalScore,getScoreByDate,getTasksByDateAndStatus,date,status]);
   return Object.keys(tasks).length === 0 ? (
     <div style={{ textAlign: 'center' }}>
       <TaskDatePicker date={date} setDate={setDate}/>
+      <StatusSelecter status={status} setStatus={setStatus} />
       <Link to={"/tasks/add/"+date}>Add Task</Link>
       <h2>Total Score: {totalScore}</h2>
       <h3>No Tasks</h3>
@@ -55,6 +70,7 @@ const TasksList = ({ tasks,getTotalScore,getTasksByDate,getScoreByDate }) => {
     <div>
       <br></br>
         <TaskDatePicker date={date} setDate={setDate}/>
+      <StatusSelecter status={status} setStatus={setStatus} />
       <Link to={"/tasks/add/"+date}>Add Task</Link>
      <h3>Tasks</h3>
         <h2>Total Score: {totalScore}</h2>
@@ -71,4 +87,4 @@ const mapStateToProps = (state, props) => ({
   tasks: state.tasks,
 });
 
-export default connect(mapStateToProps, { getTasksByDate,getTotalScore,getScoreByDate })(TasksList);
+export default connect(mapStateToProps, { getTasksByDate,getTotalScore,getScoreByDate,getTasksByDateAndStatus })(TasksList);

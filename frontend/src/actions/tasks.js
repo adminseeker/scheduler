@@ -1,6 +1,5 @@
 import axios from 'axios';
 import url from '../utils/backendUrl'
-import { getScoreByDate } from './scores';
 
 let backend_url = url()
 
@@ -68,6 +67,41 @@ const getTasksByDate = (date) => {
 };
 
 
+const getTasksByDateAndStatus =(date,status) => {
+  return async (dispatch) => {
+    try {
+      const body = JSON.stringify({date});
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const res = await axios.post(backend_url+'/api/tasks/date', body, config);
+      let tasks=res.data
+      let result=[]
+      if(status==='all'){
+        tasks.forEach((task)=>result.push(task))
+      }else{
+        tasks.forEach((task)=>{
+          if(task.status===status){
+            result.push(task)
+          }
+        })
+      }
+      dispatch({
+        type: 'GET_TASKS',
+        tasks: result,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: 'TASKS_ERROR',
+      });
+    }
+  };
+};
+
+
 const editTask = (task, id,date) => {
   return async (dispatch) => {
     try {
@@ -112,4 +146,5 @@ const removeTask = (id,date) => {
   };
 };
 
-export { addTask,getTasks,getTasksByDate,editTask,removeTask };
+
+export { addTask,getTasks,getTasksByDate,getTasksByDateAndStatus,editTask,removeTask };
